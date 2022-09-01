@@ -37,7 +37,7 @@ export function captcha () {
  * @returns 
  */
 export function userLogin (loginForm : any) {
-    return http.post('/isrpUser/isrpUser/userLogin', loginForm)
+    return http.post('/user/login', loginForm)
 }
 /**
  * 商家登录
@@ -55,7 +55,7 @@ export function businessLogin (loginForm : any) {
 export function managerLogin (loginForm : any) {
     console.log(loginForm);
     
-    return http.post('/user/login', loginForm)
+    return http.post('/user/managerLogin', loginForm)
 }
 /**
  * 获取用户信息

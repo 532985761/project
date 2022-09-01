@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     v-model="centerDialogVisible"
-    title="欢迎来到智租网注册中心"
+    title="欢迎来到澡堂网注册中心"
     width="60%"
     center
     :close-on-click-modal="false"

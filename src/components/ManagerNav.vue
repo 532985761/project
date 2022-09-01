@@ -35,7 +35,7 @@
               index="/manage/goods"
             >
               <el-icon><tickets /></el-icon>
-              <template #title>商品管理</template>
+              <template #title>澡堂商品管理</template>
             </el-menu-item>
             <el-menu-item
               index="/manage/locate"
