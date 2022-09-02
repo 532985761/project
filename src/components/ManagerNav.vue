@@ -2,7 +2,7 @@
   <div>
     <el-container>
       <el-header
-        class="m-5 text-3xl font-bold flex justify-center items-center"
+        class="m-5 text-3xl font-bold flex justify-center items-center "
       >
         澡堂管理系统
         <span class="text-sm">| 管理平台</span>
