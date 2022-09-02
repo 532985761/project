@@ -53,6 +53,10 @@
               <el-icon><user /></el-icon>
               <template #title>用户管理</template>
             </el-menu-item>
+            <el-menu-item index="/manage/notice">
+              <el-icon><van /></el-icon>
+              <template #title>澡堂通知</template>
+            </el-menu-item>
             <div @click="logout">
               <el-menu-item class="text-red-600">
                 <el-icon><close /></el-icon>

@@ -11,7 +11,7 @@ export const manager: Array<RouteRecordRaw> = [
     path: "/manage",
     component: () => import("@/components/ManagerNav.vue"),
     redirect: "/manage/index",
-    children: [  
+    children: [
         {
         // 管理员首页
         path: "index",
@@ -28,7 +28,7 @@ export const manager: Array<RouteRecordRaw> = [
         // 用户管理
         path: "user",
         name: 'user',
-        component: () => import("@/views/manager-goods/index.vue"),
+        component: () => import("@/views/manager-user/index.vue"),
       },
       {
         // 澡堂位置管理
@@ -41,6 +41,12 @@ export const manager: Array<RouteRecordRaw> = [
         path: "store",
         name: 'store',
         component: () => import("@/views/manager-store/index.vue"),
+      },
+      {
+        // 澡堂通知管理
+        path: "notice",
+        name: 'notice',
+        component: () => import("@/views/manager-notice/index.vue"),
       },
     ],
   },
