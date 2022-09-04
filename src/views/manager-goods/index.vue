@@ -104,7 +104,7 @@
 
   <el-dialog
       v-model="dialogVisible1"
-      title="新增商品"
+      title="编辑商品"
       width="30%"
 
   >
