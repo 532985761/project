@@ -21,8 +21,9 @@
               type="primary"
               class="w-120 my-2"
               round
-          >点此登录</el-button
+          >用户登录</el-button
           ></el-col>
+
         </el-row>
         <div style="text-align: center;color: white" class=" text-2xl ">
           <el-link @click="getChild" style="color: white">暂无账号？点击注册账号</el-link>
@@ -71,7 +72,7 @@
             </span>
       </el-form-item>
       <el-form-item>
-        <div style="text-align: center"><el-button type="primary" class="ml-35" @click="submitForm(loginFormRef)"
+        <div style="text-align: center"><el-button type="primary" class="ml-35" @click="submitFormLogin(loginFormRef)"
         >登录</el-button
         ></div>
       </el-form-item>
@@ -119,16 +120,16 @@ const rulesLogin = reactive<FormRules>({
 const submitFormLogin = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await userLogin({
-    email: loginForm.username,
+    username: loginForm.username,
     password: loginForm.password,
     code: loginForm.code,
   }).then((res) => {
     if (res.status == 200) {
       const userstore = userStore();
       const data = res.data;
-      userstore.setInfo(data.info);
+      userstore.setInfo(data);
       userstore.setToken(data.tokenHeader, data.token);
-      router.push("/isrpUser");
+      router.push("/manage");
       ElMessage({
         message: "登陆成功",
         type: "success",

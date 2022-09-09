@@ -1,146 +1,74 @@
 <template>
-  <div>
+  <div class="common-layout">
     <el-container>
-      <el-header
-        class="m-5 text-3xl font-bold flex justify-center items-center "
-      >
-        澡堂管理系统
-        <span class="text-sm">| 管理平台</span>
+      <el-header class="bg-slate-600">
+        <div style="text-align: center">
+          <span style="    color: white;line-height: 53px;font-size: 26px;">欢迎来到仓库储存系统后台管理中心</span>
+        </div>
       </el-header>
       <el-container>
-        <el-aside :width="navWidth">
-          <div class="text-center">
-            <el-button
-              :loading="loading"
-              :icon="isCollapse == false ? CaretLeft : CaretRight"
-              circle
-              @click="(isCollapse = !isCollapse), (loading = true)"
-            />
-          </div>
-          <el-menu
-            :default-active="managerNavActive"
-            :collapse="isCollapse"
-            router
-          >
-            <el-menu-item
-              index="/isrpManager/userid=isrp_grouptwo/8888"
-              disabled
-            >
-              <el-icon><avatar /></el-icon>
-              <template #title>
-                欢迎您, {{ userStore().info.username }}</template
+        <el-aside width="200px" >
+          <el-row>
+            <el-col :span="24">
+              <el-menu
+                  active-text-color="#ffd04b"
+                  background-color="#545c64"
+                  class="el-menu-vertical-demo"
+                  default-active="2"
+                  text-color="#fff"
+                  @open="handleOpen"
+                  @close="handleClose"
               >
-            </el-menu-item>
-            <el-menu-item
-              index="/manage/goods"
-            >
-              <el-icon><tickets /></el-icon>
-              <template #title>澡堂商品管理</template>
-            </el-menu-item>
-            <el-menu-item
-              index="/manage/locate"
-            >
-              <el-icon><van /></el-icon>
-              <template #title>澡堂位置管理</template>
-            </el-menu-item>
-            <el-menu-item
-            index="/manage/store"
-          >
-            <el-icon><van /></el-icon>
-            <template #title>澡堂储物柜管理</template>
-          </el-menu-item>
-            <el-menu-item index="/manage/user">
-              <el-icon><user /></el-icon>
-              <template #title>用户管理</template>
-            </el-menu-item>
-            <el-menu-item index="/manage/notice">
-              <el-icon><van /></el-icon>
-              <template #title>澡堂通知</template>
-            </el-menu-item>
-            <div @click="logout">
-              <el-menu-item class="text-red-600">
-                <el-icon><close /></el-icon>
-                <template #title>退出</template>
-              </el-menu-item>
-            </div>
-          </el-menu>
+                <div style="margin-left: 25px;;color: white">欢迎你，<span>{{userstore.info.username}}</span>
+                </div>
+
+                <el-sub-menu index="1">
+                  <template #title>
+                    <el-icon><location /></el-icon>
+                    <span>Navigator One</span>
+                  </template>
+                  <el-menu-item-group title="Group One">
+                    <el-menu-item index="1-1">item one</el-menu-item>
+                    <el-menu-item index="1-2">item two</el-menu-item>
+                  </el-menu-item-group>
+                  <el-menu-item-group title="Group Two">
+                    <el-menu-item index="1-3">item three</el-menu-item>
+                  </el-menu-item-group>
+                  <el-sub-menu index="1-4">
+                    <template #title>item four</template>
+                    <el-menu-item index="1-4-1">item one</el-menu-item>
+                  </el-sub-menu>
+                </el-sub-menu>
+                <el-menu-item index="2">
+                  <el-icon><icon-menu /></el-icon>
+                  <span>Navigator Two</span>
+                </el-menu-item>
+                <el-menu-item index="3" disabled>
+                  <el-icon><document /></el-icon>
+                  <span>Navigator Three</span>
+                </el-menu-item>
+                <el-menu-item index="4">
+                  <el-icon><setting /></el-icon>
+                  <span>Navigator Four</span>
+                </el-menu-item>
+                <el-menu-item index="4">
+                  <el-icon><CloseBold /></el-icon>
+                  <span>点击退出</span>
+                </el-menu-item>
+              </el-menu>
+            </el-col>
+          </el-row>
         </el-aside>
-        <el-container>
-          <el-main class="h-[76vh]"><router-view /></el-main>
-    
-        </el-container>
+        <el-main>Main</el-main>
       </el-container>
     </el-container>
   </div>
 </template>
-
 <script lang="ts" setup>
-import { ref, watch, onMounted } from "vue";
-import {
-  User,
-  Tickets,
-  Van,
-  Close,
-  CaretLeft,
-  CaretRight,
-  Avatar,
-} from "@element-plus/icons-vue";
 import { userStore } from "@/store/user";
-import { ElMessage } from "element-plus";
-import router from "@/router";
+import {onMounted, ref} from "vue";
 
-const loading = ref(false);
-const isCollapse = ref(false);
-const navWidth = ref("200px");
-const managerNavActive = ref("/isrpManager/userid=isrp_grouptwo/8888");
 
-onMounted(() => {
-  const userstore = userStore();
-  managerNavActive.value = userstore.navActive;
-});
 
-// 回调函数异常;
-// const handleOpen = (key: string, keyPath: string[]) => {
-//   console.log(key, keyPath, "close");
-//   navWidth.value = "200px";
-//   loading.value = false;
-// };
-// const handleClose = (key: string, keyPath: string[]) => {
-//   console.log(key, keyPath, "close");
-//   navWidth.value = "100px";
-//   loading.value = false;
-// };
-watch(isCollapse, (newValue) => {
-  if (newValue == true) {
-    setNavWidth("70px");
-  }
-  if (newValue == false) {
-    setNavWidth("200px");
-  }
-});
-
-const setNavWidth = (width: string) => {
-  setTimeout(() => {
-    navWidth.value = width;
-    loading.value = false;
-  }, 400);
-};
-const logout = () => {
-  userStore().logout();
-  router.push(
-    "/managerLogin"
-  );
-  ElMessage({
-    message: "退出成功",
-    type: "success",
-    duration: 2 * 1000,
-  });
-};
+const userstore = userStore();
 </script>
-
-<style scoped>
-.el-menu-item.is-disabled {
-  opacity: 1;
-  color: #0ea5e9;
-}
-</style>
