@@ -1,58 +1,158 @@
 <template>
   <el-row class="min-h-screen">
+<!--    <el-col-->
+<!--    :lg="8"-->
+<!--    class="flex items-center justify-center flex-col bg-sky-50 scale-up-hor-center"-->
+<!--  >-->
+<!--  -->
+<!--  </el-col>-->
     <el-col
-    :lg="8"
-    class="flex items-center justify-center flex-col bg-sky-50 scale-up-hor-center"
-  >
-    <h2 class="font-bold text-2xl text-gray-600">请选择您的角色</h2>
-    <div class="flex items-center justify-center my-5">
-      <span class="h-[1px] w-50 bg-gray-200"></span>
-    </div>
-    <div>
-      <el-button
-        @click="$router.push('/userLogin')"
-        type="success"
-        class="w-50 my-2"
-        round
-        >普通用户登录</el-button
-      >
-    </div>
-    <div>
-      <el-button
-        @click="$router.push('/managerLogin')"
-        type="primary"
-        class="w-50 my-2"
-        round
-        >管理员登录</el-button
-      >
-    </div>
-
-    <div>
-      <el-link @click="getChild">没有账号?点击注册</el-link>
-    </div>
-  </el-col>
-    <el-col
-      :lg="16"
-      class="flex items-center justify-center bg-dark-500 flex-col"
+      :lg="24"
+      class="flex items-center justify-center bg-neutral-500 flex-col"
     >
-      <div class="font-bold text-5xl text-light-50 mb-4 scale-in-ver-center">欢迎来到洗澡预约系统</div>
+      <div class="font-bold text-5xl text-light-50 mb-4 scale-in-ver-center">欢迎来到仓库储存系统</div>
       <div class="text-gray-200 text-sm scale-in-ver-center">
-       
+        <div class="flex items-center justify-center my-5">
+          <span class="h-[1px] w-120 bg-gray-200"></span>
+        </div>
+        <el-row>
+          <el-col :span="24"><div class="grid-content ep-bg-purple" />   <el-button
+              @click="dialogVisible = true"
+              type="primary"
+              class="w-120 my-2"
+              round
+          >点此登录</el-button
+          ></el-col>
+        </el-row>
+        <div style="text-align: center;color: white" class=" text-2xl ">
+          <el-link @click="getChild" style="color: white">暂无账号？点击注册账号</el-link>
+        </div>
       </div>
     </el-col>
   
   </el-row>
   <UserRegister ref="childRef"></UserRegister>
+
+<!--  登录框-->
+  <el-dialog
+      v-model="dialogVisible"
+      title="欢迎登录"
+      width="40%"
+      :before-close="handleClose"
+      center
+  >
+
+    <el-form
+        ref="loginFormRef"
+        :model="loginForm"
+        :rules="rules"
+        label-width="120px"
+        class="mr-20"
+        :size="formSize"
+        status-icon
+    >
+      <el-form-item label="用户名" prop="username">
+        <el-input v-model="loginForm.username" />
+      </el-form-item>
+      <el-form-item label="密码" prop="password">
+        <el-input
+            type="password"
+            show-password
+            v-model="loginForm.password"
+        />
+      </el-form-item>
+      <el-form-item label="验证码" prop="code">
+        <el-input v-model="loginForm.code" />
+        <span
+            class="absolute right-0 top-0 cursor-pointer"
+            @click="refreshCode"
+        >
+              <Captcha :timestamp="timestamp" />
+            </span>
+      </el-form-item>
+      <el-form-item>
+        <div style="text-align: center"><el-button type="primary" class="ml-35" @click="submitForm(loginFormRef)"
+        >登录</el-button
+        ></div>
+      </el-form-item>
+    </el-form>
+  </el-dialog>
+  <UserRegister ref="childRef"></UserRegister>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import UserRegister from "./UserRegister.vue";
-const childRef = ref();
+import Captcha from "@/components/Captcha.vue";
+import {onMounted, reactive, ref} from "vue";
+import UserRegister from "./register.vue";
+import {ElMessage, FormInstance, FormRules} from "element-plus";
+import {userLogin} from "@/api/user";
+import {userStore} from "@/store/user";
+import router from "@/router";
+const childRef = ref(false);
 const getChild = () => {
   // 3. 调用子组件的方法或者变量，通过value
   childRef.value.showDialog(true);
 };
+const dialogVisible = ref(false)
+const formSize = ref("large");
+const timestamp = ref(new Date().getTime().toString());
+const loginFormRef = ref<FormInstance>();
+const loginForm = reactive({
+  username: "",
+  password: "",
+  code: "",
+});
+const rulesLogin = reactive<FormRules>({
+  username: [
+    { required: true, message: "请输入账号", trigger: "blur" },
+    { min: 2, max: 40, message: "账号长度2-30位", trigger: "blur" },
+  ],
+  password: [
+    { required: true, message: "请输入密码", trigger: "blur" },
+    { min: 2, max: 20, message: "密码长度为2-20位", trigger: "blur" },
+  ],
+  code: [
+    { required: true, message: "请输入验证码", trigger: "blur" },
+    { min: 4, max: 4, message: "验证码长度为4位", trigger: "blur" },
+  ],
+});
+const submitFormLogin = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  await userLogin({
+    email: loginForm.username,
+    password: loginForm.password,
+    code: loginForm.code,
+  }).then((res) => {
+    if (res.status == 200) {
+      const userstore = userStore();
+      const data = res.data;
+      userstore.setInfo(data.info);
+      userstore.setToken(data.tokenHeader, data.token);
+      router.push("/isrpUser");
+      ElMessage({
+        message: "登陆成功",
+        type: "success",
+        duration: 5 * 1000,
+      });
+    }
+  });
+};
+
+const resetForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  formEl.resetFields();
+};
+
+const refreshCode = () => {
+  timestamp.value = new Date().getTime().toString();
+};
+onMounted(()=>{
+  timestamp.value = new Date().getTime().toString();
+})
+/*
+* 注册
+* */
+
 </script>
 <style scoped>
 .my-header {

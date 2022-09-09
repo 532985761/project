@@ -9,7 +9,7 @@ const userstore = userStore()
 
 // 请求
 const http = axios.create({
-  baseURL: "http://localhost:8888/bath",
+  baseURL: "http://localhost:8888/ws",
   timeout: 6000,
 });
 // 请求拦截
