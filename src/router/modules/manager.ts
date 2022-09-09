@@ -18,36 +18,7 @@ export const manager: Array<RouteRecordRaw> = [
         name: 'index',
         component: () => import("@/views/manager-home/index.vue"),
       },
-      {
-        // 商品管理
-        path: "goods",
-        name: 'goods',
-        component: () => import("@/views/manager-goods/index.vue"),
-      },
-      {
-        // 用户管理
-        path: "user",
-        name: 'user',
-        component: () => import("@/views/manager-user/index.vue"),
-      },
-      {
-        // 澡堂位置管理
-        path: "locate",
-        name: 'locate',
-        component: () => import("@/views/manager-locate/index.vue"),
-      },
-      {
-        // 澡堂储物柜管理
-        path: "store",
-        name: 'store',
-        component: () => import("@/views/manager-store/index.vue"),
-      },
-      {
-        // 澡堂通知管理
-        path: "notice",
-        name: 'notice',
-        component: () => import("@/views/manager-notice/index.vue"),
-      },
+
     ],
   },
 ];

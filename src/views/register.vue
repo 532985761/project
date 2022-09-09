@@ -16,7 +16,7 @@
         label-width="120px"
         class="demo-ruleForm"
     >
-      <el-form-item label="用户名" prop="email">
+      <el-form-item label="账户" prop="email">
         <el-input v-model="ruleForm.email" placeholder="请输入用户名" />
       </el-form-item>
       <el-form-item label="密码" prop="pass">
