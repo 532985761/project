@@ -1,12 +1,12 @@
 <template>
   <el-button
     @click="$router.push('/isrpManager/userid=isrp_grouptwo/8888/orderModel')"
-    >订单模式管理</el-button
+    >仓库管理</el-button
   >
   <el-button
     type="primary"
     @click="$router.push('/isrpManager/userid=isrp_grouptwo/8888/orderProcess')"
-    >订单流程管理</el-button
+    >管理</el-button
   >
   <el-button
     type="info"

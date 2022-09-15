@@ -2,11 +2,17 @@ import { RouteRecordRaw } from "vue-router";
 
 // 管理端路由
 export const manager: Array<RouteRecordRaw> = [
-  {
-    // 管理员登陆页面
-    path: "/managerLogin",
-    component: () => import("@/views/manager-login/index.vue"),
-  },
+    {
+        // 管理员首页
+        path: "/home",
+        name: 'home',
+        component: () => import("@/views/Home.vue"),
+    },
+  // {
+  //   // 管理员登陆页面
+  //   path: "/managerLogin",
+  //   component: () => import("@/views/manager-login/index.vue"),
+  // },
   {
     path: "/manage",
     component: () => import("@/components/ManagerNav.vue"),
@@ -18,7 +24,24 @@ export const manager: Array<RouteRecordRaw> = [
         name: 'index',
         component: () => import("@/views/manager-home/index.vue"),
       },
-
+        {
+            // 仓库信息
+            path: "wareinfo",
+            name: 'wareinfo',
+            component: () => import("@/views/manager-wareinfo/index.vue"),
+        },
+        {
+            // 租借管理
+            path: "rent",
+            name: 'rent',
+            component: () => import("@/views/manager-rent/index.vue"),
+        },
+        {
+            // 仓库调拨
+            path: "transfer",
+            name: 'transfer',
+            component: () => import("@/views/manager-transfer/index.vue"),
+        },
     ],
   },
 ];

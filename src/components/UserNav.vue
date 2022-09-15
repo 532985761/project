@@ -1,145 +1,67 @@
 <template>
-  <el-menu
-    class="el-menu-demo"
-    mode="horizontal"
-    :ellipsis="false"
-    background-color="#545c64"
-    text-color="#fff"
-  >
-    <el-menu-item index="0">
-      <el-image
-        style="width: 50px; height: 50px; border-radius: 15px"
-        src="/src/assets/znzzlogo.png"
-        class="mt-0.5"
-      />
-      <span class="ml-3"> 欢迎来到智租网平台</span></el-menu-item
-    >
-    <div class="flex-grow" />
-    <router-link to="/isrpUser/userCart"
-      ><el-menu-item index="1">我的购物车</el-menu-item></router-link
-    >
+  <div class="common-layout">
+    <el-container>
+      <el-header class="bg-slate-600">
+        <div style="text-align: center">
+          <span style="    color: white;line-height: 53px;font-size: 26px;">欢迎使用仓库储存系统</span>
+        </div>
+      </el-header>
+      <el-container  >
+        <el-aside width="200px">
+          <el-row>
 
-    <el-menu-item index="3"> </el-menu-item>
+            <el-col :span="24">
+              <el-menu
+                  active-text-color="#ffd04b"
+                  background-color="#545c64"
+                  class="el-menu-vertical-demo"
+                  default-active="2"
+                  text-color="#fff"
+                  style="height: 650px"
+              >
+                <div style="margin-left: 25px;;color: white">欢迎你，<span>{{userstore.info.username}}</span>
+                </div>
 
-    <el-sub-menu index="2">
-      <template #title>
-        <el-avatar
-          class="mt-2"
-          :size="40"
-          src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-        /><span class="ml-3">欢迎你：{{ nickname }}</span>
-      </template>
-      <el-menu-item index="2-1"
-        ><el-icon><UserFilled /></el-icon>个人信息</el-menu-item
-      >
-      <el-menu-item index="2-2"
-        ><el-icon><Shop /></el-icon>我的订单</el-menu-item
-      >
-      <el-menu-item index="2-3" @click="logout">
-        <el-icon><CircleCloseFilled /></el-icon>退出登录</el-menu-item
-      >
-    </el-sub-menu>
-  </el-menu>
 
-  
-  <el-row class="bg-light-600">
-    <el-col :span="24"
-      ><div class="grid-content ep-bg-purple-dark">
-        <el-divider>
-          <span style="font-weight: bold" class="italic text-2xl">
-            欢迎光临<el-icon><star-filled /></el-icon>智能租租网</span
-          >
-        </el-divider>
-      </div></el-col
-    >
-  </el-row>
+                <el-menu-item index="2">
+                  <el-icon>
+                    <CreditCard /></el-icon>
+                  <span>个人信息</span>
+                </el-menu-item>
+                <el-menu-item index="3" >
+                  <el-icon><document /></el-icon>
+                  <span>仓库货物详情</span>
+                </el-menu-item>
 
-  <router-view></router-view>
-  <!-- 底部 -->
-  <el-footer>
-    <el-divider>
-      <span class="italic text-lg">CopyRight By @grouptwo</span>
-      <span style="font-weight: bold" class="italic text-2xl"
-        >智能化共享租赁平台</span
-      >
-      <span style="font-weight: bold" class="italic text-2xl text-blue-500">
-        <el-icon><star-filled /></el-icon>欢迎您的到来</span
-      >
-    </el-divider></el-footer
-  >
+                <el-menu-item index="5">
+                  <el-icon><setting /></el-icon>
+                  <span>仓库租借</span>
+                </el-menu-item>
+                <el-menu-item index="7">
+                  <el-icon><setting /></el-icon>
+                  <span>仓库调拨</span>
+                </el-menu-item>
+                <el-menu-item index="8">
+                  <el-icon><setting /></el-icon>
+                  <span>货物质检</span>
+                </el-menu-item>
+                <el-menu-item index="6">
+                  <el-icon><CloseBold /></el-icon>
+                  <span @click="$router.push('/')">点击退出</span>
+                </el-menu-item>
+              </el-menu>
+            </el-col>
+          </el-row>
+        </el-aside><el-main>  <el-card></el-card>
+      </el-main>
+
+      </el-container>
+    </el-container>
+  </div>
 </template>
-
 <script lang="ts" setup>
-import index from "@/views/user/index.vue";
-import { ref, computed } from "vue";
 import { userStore } from "@/store/user";
-import { Search } from "@element-plus/icons-vue";
-import type { TabsPaneContext } from "element-plus";
-import router from "@/router";
-import { ElMessage } from "element-plus";
-import VueEvent from "@/utils/event";
-import { useRouter } from "vue-router";
-let keyWord = ref("");
-// 退出
+import {onMounted, ref} from "vue";
+
 const userstore = userStore();
-const logout = () => {
-  router.push("/userLogin");
-  userStore().logout();
-  ElMessage({
-    message: "退出成功",
-    type: "success",
-    duration: 2 * 1000,
-  });
-};
-
-const nickname = userstore.info.nickname;
-const activeName = ref("5");
-const handleClick = (tab: TabsPaneContext, event: Event) => {
-  if (tab.props.name == 5) {
-    router.push("/isrpUser");
-  }
-  if (tab.props.name == 3) {
-    router.push("/isrpUser/goodsdetail");
-  }
-  if (tab.props.name == 6) {
-    router.push("/isrpUser/rentCenter/1/1");
-  }
-};
-//激活导航栏
-VueEvent.on("tomsg", (value: any) => {
-  activeName.value = value.data;
-});
-//显示div
-const showDiv = ref(true);
-VueEvent.on("showDiv", (value: any) => {
-  showDiv.value = value.data;
-});
 </script>
-
-<style>
-.flex-grow {
-  flex-grow: 1;
-}
-.el-col {
-  border-radius: 4px;
-}
-
-.grid-content {
-  border-radius: 4px;
-  min-height: 36px;
-}
-
-@keyframes kenburns-top {
-  0% {
-    transform: scale(0.7) translateY(0);
-    transform-origin: 50% 16%;
-  }
-  100% {
-    transform: scale(1.25) translateY(-15px);
-    transform-origin: top;
-  }
-}
-.kenburns-top {
-  animation: kenburns-top 8s ease-out both;
-}
-</style>

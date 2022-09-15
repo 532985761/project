@@ -1,5 +1,5 @@
 <template>
-  <el-empty description="欢迎来到澡堂管理系统">
+  <el-empty description="欢迎来到系统">
     <manager-home-title />
     <manager-home-button-group />
   </el-empty>

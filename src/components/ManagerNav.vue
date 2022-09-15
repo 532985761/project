@@ -6,9 +6,10 @@
           <span style="    color: white;line-height: 53px;font-size: 26px;">欢迎来到仓库储存系统后台管理中心</span>
         </div>
       </el-header>
-      <el-container>
-        <el-aside width="200px" >
+      <el-container  >
+        <el-aside width="200px">
           <el-row>
+
             <el-col :span="24">
               <el-menu
                   active-text-color="#ffd04b"
@@ -16,8 +17,8 @@
                   class="el-menu-vertical-demo"
                   default-active="2"
                   text-color="#fff"
-                  @open="handleOpen"
-                  @close="handleClose"
+                  style="height: 700px"
+                  router
               >
                 <div style="margin-left: 25px;;color: white">欢迎你，<span>{{userstore.info.username}}</span>
                 </div>
@@ -25,41 +26,48 @@
                 <el-sub-menu index="1">
                   <template #title>
                     <el-icon><location /></el-icon>
-                    <span>Navigator One</span>
+                    <span>仓库信息</span>
                   </template>
                   <el-menu-item-group title="Group One">
-                    <el-menu-item index="1-1">item one</el-menu-item>
-                    <el-menu-item index="1-2">item two</el-menu-item>
+                    <el-menu-item index="/manage/wareinfo">查看仓库信息</el-menu-item>
                   </el-menu-item-group>
-                  <el-menu-item-group title="Group Two">
-                    <el-menu-item index="1-3">item three</el-menu-item>
-                  </el-menu-item-group>
-                  <el-sub-menu index="1-4">
-                    <template #title>item four</template>
-                    <el-menu-item index="1-4-1">item one</el-menu-item>
-                  </el-sub-menu>
+
                 </el-sub-menu>
-                <el-menu-item index="2">
-                  <el-icon><icon-menu /></el-icon>
-                  <span>Navigator Two</span>
+                <el-menu-item index="/manage/rent">
+                  <el-icon>
+                    <CreditCard /></el-icon>
+                  <span>仓库租借管理</span>
                 </el-menu-item>
-                <el-menu-item index="3" disabled>
+                <el-menu-item index="/manage/transfer" >
                   <el-icon><document /></el-icon>
-                  <span>Navigator Three</span>
+                  <span>仓库调拨</span>
                 </el-menu-item>
-                <el-menu-item index="4">
+
+                <el-sub-menu index="4">
+                  <template #title>
+                    <el-icon><location /></el-icon>
+                    <span>库存变更</span>
+                  </template>
+                  <el-menu-item-group title="Group One">
+                    <el-menu-item index="4-1">查看入库信息</el-menu-item>
+                    <el-menu-item index="4-2">查看出库信息</el-menu-item>
+                  </el-menu-item-group>
+
+                </el-sub-menu>
+                <el-menu-item index="5">
                   <el-icon><setting /></el-icon>
-                  <span>Navigator Four</span>
+                  <span>货物质检</span>
                 </el-menu-item>
-                <el-menu-item index="4">
+                <el-menu-item index="/home">
                   <el-icon><CloseBold /></el-icon>
-                  <span>点击退出</span>
+                  <span >点击退出</span>
                 </el-menu-item>
               </el-menu>
             </el-col>
           </el-row>
-        </el-aside>
-        <el-main>Main</el-main>
+        </el-aside><el-main> <el-card><router-view></router-view> </el-card>
+      </el-main>
+
       </el-container>
     </el-container>
   </div>
@@ -67,8 +75,6 @@
 <script lang="ts" setup>
 import { userStore } from "@/store/user";
 import {onMounted, ref} from "vue";
-
-
-
+import router from '@/router'
 const userstore = userStore();
 </script>

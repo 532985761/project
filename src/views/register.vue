@@ -60,8 +60,6 @@
 import { ref, reactive, onMounted } from "vue";
 import { ElButton, ElDialog } from "element-plus";
 import { CircleCloseFilled } from "@element-plus/icons-vue";
-import { testGoodsApi } from "@/api/goods";
-import { getOneUserInfo, registerUser } from "@/api/user";
 import { ElMessage } from "element-plus";
 import type { FormInstance } from "element-plus";
 let loading = ref(false);

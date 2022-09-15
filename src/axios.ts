@@ -18,11 +18,9 @@ http.interceptors.request.use(
     // 加载
     start()
     // 请求头设置
-    let token = userstore.token || ''
     config.headers = {
       ...config.headers,
-      "content-type": "application/json",
-      "Authorization": token
+      // "content-type": "application/json",
     }
     return config;
   },
