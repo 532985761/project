@@ -128,7 +128,6 @@ const submitFormLogin = async (formEl: FormInstance | undefined) => {
       const userstore = userStore();
       const data = res.data;
       userstore.setInfo(data);
-      userstore.setToken(data.tokenHeader, data.token);
       router.push("/manage");
       ElMessage({
         message: "登陆成功",

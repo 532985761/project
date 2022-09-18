@@ -49,6 +49,7 @@ import {onMounted, ref} from 'vue'
 import {ElMessage, ElTable} from 'element-plus'
 import http from "@/axios";
 import QS from 'qs'
+import router from '@/router'
 import axios from "axios";
 const oneValue = ref('请选择')
 const oneOption = ref([
@@ -59,7 +60,7 @@ const oneOption = ref([
   }
 
 ])
-const twoValue = ref('请选择')
+const twoValue = ref(1)
 const twoOption = ref([
   {
     "warehouseId":1,
@@ -101,13 +102,18 @@ const toggleSelection = (rows) => {
   }
 }
 const handleSelectionChange = (val) => {
+
   multipleSelection.value = val
 }
 
 const confirmChange =()=>{
   let ids:any = [];
-  ids=multipleSelection.value.map( r=>ids.push(r.goodsId))
-
+  multipleSelection.value.forEach((r)=>{
+    ids.push(r.goodsId)
+    console.log(r.goodsId)
+  })
+  // console.log(multipleSelection.value)
+  console.log(ids)
   let params = new URLSearchParams();
   params.append('id',ids);
   if (ids.length == 0){
@@ -118,8 +124,9 @@ const confirmChange =()=>{
     })
     return false;
   }
-  http.post("/ware/changeWare",QS.stringify({'id': ids}, {arrayFormat: 'brackets'})).then(()=>{
-
+  http.post("/ware/changeWare/"+twoValue.value,QS.stringify({'id': ids}, {arrayFormat: 'brackets'})).then(()=>{
+init();
+router.go(0)
   })
 }
 
