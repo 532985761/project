@@ -128,7 +128,13 @@ const submitFormLogin = async (formEl: FormInstance | undefined) => {
       const userstore = userStore();
       const data = res.data;
       userstore.setInfo(data);
-      router.push("/manage");
+      console.log()
+      if (userstore.info.type == 1){
+        router.push("/manage");
+      }
+     else {
+        router.push("/user");
+      }
       ElMessage({
         message: "登陆成功",
         type: "success",

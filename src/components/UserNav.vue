@@ -18,12 +18,13 @@
                   default-active="2"
                   text-color="#fff"
                   style="height: 650px"
+                  router
               >
                 <div style="margin-left: 25px;;color: white">欢迎你，<span>{{userstore.info.username}}</span>
                 </div>
 
 
-                <el-menu-item index="2">
+                <el-menu-item index="/user/userInfo">
                   <el-icon>
                     <CreditCard /></el-icon>
                   <span>个人信息</span>
@@ -52,7 +53,7 @@
               </el-menu>
             </el-col>
           </el-row>
-        </el-aside><el-main>  <el-card></el-card>
+        </el-aside><el-main>  <el-card><router-view></router-view></el-card>
       </el-main>
 
       </el-container>

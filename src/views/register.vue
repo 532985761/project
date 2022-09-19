@@ -60,8 +60,10 @@
 import { ref, reactive, onMounted } from "vue";
 import { ElButton, ElDialog } from "element-plus";
 import { CircleCloseFilled } from "@element-plus/icons-vue";
+
 import { ElMessage } from "element-plus";
 import type { FormInstance } from "element-plus";
+import {registerUser} from "@/api/user";
 let loading = ref(false);
 
 
@@ -139,7 +141,15 @@ async function confirmRegister() {
     pass: ruleForm.pass,
 
   };
+if (ruleForm.pass != ruleForm.checkPass || !ruleForm.pass || !ruleForm.checkPass ){
+  ElMessage({
+    message: "请检查密码",
+    type: "warning",
+  });
+  loading.value = false;
 
+  return false
+}
   await registerUser(userForm)
       .then((res: any) => {
         if (res.status == 200) {
