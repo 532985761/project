@@ -125,4 +125,15 @@ public class GoodsController {
         return ResponseEntity.ok(goodsMapper.selectById(id));
 
     }
+
+    /**
+     * 每个用户对应的货物②
+     */
+    @GetMapping("/getAllGoodsByUserId/{id}")
+    public ResponseEntity getAllGoodsByUserId(@PathVariable("id") Integer id){
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("user_id",id);
+
+        return ResponseEntity.ok( goodsMapper.selectList(queryWrapper));
+    }
 }
