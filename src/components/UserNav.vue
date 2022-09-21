@@ -29,7 +29,7 @@
                     <CreditCard /></el-icon>
                   <span>个人信息</span>
                 </el-menu-item>
-                <el-menu-item index="3" >
+                <el-menu-item index="/user/goodsDetail" >
                   <el-icon><document /></el-icon>
                   <span>仓库货物详情</span>
                 </el-menu-item>
@@ -38,7 +38,7 @@
                   <el-icon><setting /></el-icon>
                   <span>仓库租借</span>
                 </el-menu-item>
-                <el-menu-item index="7">
+                <el-menu-item index="/user/usertransfer">
                   <el-icon><setting /></el-icon>
                   <span>仓库调拨</span>
                 </el-menu-item>
@@ -46,9 +46,17 @@
                   <el-icon><setting /></el-icon>
                   <span>货物质检</span>
                 </el-menu-item>
-                <el-menu-item index="6">
+                <el-menu-item index="/user/intoware">
+                  <el-icon><setting /></el-icon>
+                  <span>货物入库</span>
+                </el-menu-item>
+                <el-menu-item index="/user/outoware">
+                <el-icon><setting /></el-icon>
+                <span>货物出库</span>
+              </el-menu-item>
+                <el-menu-item index="/home">
                   <el-icon><CloseBold /></el-icon>
-                  <span @click="$router.push('/')">点击退出</span>
+                  <span >点击退出</span>
                 </el-menu-item>
               </el-menu>
             </el-col>

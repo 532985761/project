@@ -108,12 +108,10 @@ const handleSelectionChange = (val) => {
 
 const confirmChange =()=>{
   let ids:any = [];
-  multipleSelection.value.forEach((r)=>{
+  multipleSelection.value.forEach((r:any)=>{
     ids.push(r.goodsId)
-    console.log(r.goodsId)
   })
-  // console.log(multipleSelection.value)
-  console.log(ids)
+
   let params = new URLSearchParams();
   params.append('id',ids);
   if (ids.length == 0){

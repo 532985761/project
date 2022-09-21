@@ -15,6 +15,26 @@ export const user: Array<RouteRecordRaw> = [
         name: "userInfo",
         component: () => import("@/views/user-info/index.vue"),
       },
+      {
+        path: "goodsDetail",
+        name: "goodsDetail",
+        component: () => import("@/views/user-goodsDetail/index.vue"),
+      },
+      {
+        path: "usertransfer",
+        name: "usertransfer",
+        component: () => import("@/views/user-transfer/index.vue"),
+      },
+      {
+        path: "intoware",
+        name: "intoware",
+        component: () => import("@/views/user-transfer/index.vue"),
+      },
+      {
+        path: "outware",
+        name: "outware",
+        component: () => import("@/views/user-transfer/index.vue"),
+      },
     ]
   },
 

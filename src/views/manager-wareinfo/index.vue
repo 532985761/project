@@ -28,7 +28,7 @@
     <el-table-column label="操作"  > <template #default="scope">
 
       <el-popconfirm
-          title="确定要删除购物车中此项吗？"
+          title="确定要删除此项吗？"
           @confirm="deleteWare(scope.row.warehouseId)"
       >
         <template #reference>
