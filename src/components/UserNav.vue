@@ -50,7 +50,7 @@
                   <el-icon><setting /></el-icon>
                   <span>货物入库</span>
                 </el-menu-item>
-                <el-menu-item index="/user/outoware">
+                <el-menu-item index="/user/outware">
                 <el-icon><setting /></el-icon>
                 <span>货物出库</span>
               </el-menu-item>

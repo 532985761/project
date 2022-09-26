@@ -28,7 +28,7 @@ export const user: Array<RouteRecordRaw> = [
       {
         path: "intoware",
         name: "intoware",
-        component: () => import("@/views/user-transfer/index.vue"),
+        component: () => import("@/views/user-intoware/index.vue"),
       },
       {
         path: "outware",

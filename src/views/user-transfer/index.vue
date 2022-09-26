@@ -1,86 +1,55 @@
 <template>
-  <el-table :data="form"  style="width: 100%">
-    <el-table-column type="expand">
-      <template #default="props">
-        <div m="4">
+  <span>请选择原仓库</span>
+  <el-select v-model="oneValue" class="m-2" placeholder="Select" size="large"   @change="getGoods">
+    <el-option
+        v-for="item in oneOption"
+        :key="item.warehouseId"
+        :label="item.warehouseName"
+        :value="item.warehouseId"
+
+    />
+  </el-select>
+  <el-table
+      ref="multipleTableRef"
+      :data="goods"
+      style="width: 100%"
+      @select="selectChange"
+      @selection-change="handleSelectionChange"
 
 
-          <h3>物品</h3>
-          <el-table :data="props.row.goods"     @selection-change="handleSelectionChange"
-                    ref="multipleTableRef"          >
-            <el-table-column type="selection" width="55" />
-            <el-table-column type="index" width="50" />
-            <el-table-column label="物品名字" prop="goodsName" />
-            <el-table-column label="物品描述" prop="city" >
-              <template #default="scope">
-                <span></span>
-                {{scope.row.info}}
-              </template>
-            </el-table-column>
-            <el-table-column label="操作"  >
-              <template #default="scope">
-                <el-button @click="getGoodsById(scope.row.goodsId)">编辑</el-button>
-              </template>
-            </el-table-column>
-
-          </el-table>
-        </div>
-      </template>
+  >
+    <el-table-column type="selection" width="55" />
+    <el-table-column label="货物名称" width="120">
+      <template #default="scope">{{ scope.row.goodsName }}</template>
     </el-table-column>
-    <el-table-column label="仓库名"  >
-      <template #default="scope">
-        {{scope.row.ware.warehouseName}}
-      </template>
+    <el-table-column  label="货物大小" width="120" >
+      <template #default="scope">{{ scope.row.area }} ㎡</template>
+
+
     </el-table-column>
 
   </el-table>
   <div style="margin-top: 20px">
-    <span>请选择需要调拨的仓库</span>
-    <el-select v-model="twoValue" class="m-2" placeholder="Select" size="large">
-      <el-option
-          v-for="item in twoOption"
-          :key="item.warehouseId"
-          :label="item.warehouseName"
-          :value="item.warehouseId"
-          @change="getGoods"
-      />
-    </el-select>
-    <el-button type="primary" @click="confirmChange">确认调拨</el-button>
+    <el-button type="primary" @click="confirmChange">确认货物出库</el-button>
   </div>
-  <el-dialog
-      v-model="dialogVisible"
-      title="Tips"
-      width="30%"
-      :before-close="handleClose"
-  >
-    <el-form :model="goods" label-width="120px">
-      <el-form-item label="货物名">
-        <el-input   v-model="goods.goodsName" />
-      </el-form-item>
-      <el-form-item label="货物介绍">
-        <el-input v-model="goods.info"  />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="editGoods(goods.goodsId)">修改</el-button>
-      </el-form-item>
-    </el-form>
-
-  </el-dialog>
 </template>
 
 <script lang="ts" setup>
-import {onMounted, reactive, ref} from 'vue'
-import http from '@/axios'
-import {ElMessage,ElTable} from "element-plus";
+import {onMounted, ref} from 'vue'
+import {ElMessage, ElTable} from 'element-plus'
+import http from "@/axios";
+import QS from 'qs'
 import router from '@/router'
-import {userStore} from "@/store/user";
-import internal from "stream";
-import QS from "qs";
-// do not use same name with ref
-const form:any = ref([])
-const  userstore = userStore()
+import axios from "axios";
+const oneValue = ref('请选择')
+const oneOption = ref([
+  {
+    "warehouseId":1,
+    "warehouseName":1
 
+  }
 
+])
 const twoValue = ref(1)
 const twoOption = ref([
   {
@@ -91,48 +60,43 @@ const twoOption = ref([
 
 ])
 const init = ()=>{
-  http.get("/goods/getGoodsByUserId/"+userstore.info.id).then((r)=>{
-    form.value = r.data
-    console.log(r.data)
-  })
-  http.get("/ware/getWareSelectByUserId").then((res)=>{
-
+  http.get("/ware/getWareSelect").then((res)=>{
+    oneOption.value = res.data
     twoOption.value = res.data
 
   })
 }
-
-onMounted(async ()=>{
+onMounted(()=>{
   init();
 })
-const dialogVisible = ref(false)
-const goods:any = ref({})
-const getGoodsById = async (id)=>{
-  http.get("/goods/getGoodsById/"+id).then((r)=>{
 
-    goods.value = r.data
+const goods = ref([])
+const getGoods = ((res)=>{
+  http.get("/ware/getGoodsByWareId/"+res).then((res)=>{
+    goods.value = res.data
+    goods.value = goods.value.filter(r => r.status != 0);
   })
-  dialogVisible.value = true;
-}
-const editGoods = async (id)=>{
+})
 
-  http.post("/goods/updateGoods",goods.value).then((r)=>{
-    ElMessage({
-      message: "操作成功",
-      type: "success",
-      duration: 2 * 1000,
-    });
-        init();
-  })
-  dialogVisible.value = false;
-}
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
-
-const multipleSelection = ref()
-const handleSelectionChange = (val) => {
-  multipleSelection.value = val
-  console.log(val)
+const multipleSelection = ref([])
+const toggleSelection = (rows) => {
+  if (rows) {
+    rows.forEach((row) => {
+      // TODO: improvement typing when refactor table
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      multipleTableRef.value!.toggleRowSelection(row, undefined)
+    })
+  } else {
+    multipleTableRef.value!.clearSelection()
+  }
 }
+const handleSelectionChange = (val) => {
+
+  multipleSelection.value = val
+}
+
 const confirmChange =()=>{
   let ids:any = [];
   multipleSelection.value.forEach((r:any)=>{
@@ -149,9 +113,10 @@ const confirmChange =()=>{
     })
     return false;
   }
-  http.post("/ware/changeWare/"+twoValue.value,QS.stringify({'id': ids}, {arrayFormat: 'brackets'})).then(()=>{
+  http.post("/ware/outWare/"+twoValue.value,QS.stringify({'id': ids}, {arrayFormat: 'brackets'})).then(()=>{
     init();
     router.go(0)
   })
 }
+
 </script>
