@@ -7,7 +7,7 @@ import com.example.demo.mapper.GoodsMapper;
 import org.springframework.stereotype.Service;
 
 /**
-* @author 张洪志
+*  
 * @description 针对表【goods】的数据库操作Service实现
 * @createDate 2022-09-21 21:45:33
 */

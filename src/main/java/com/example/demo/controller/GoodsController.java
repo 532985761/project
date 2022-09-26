@@ -106,12 +106,14 @@ public class GoodsController {
     public ResponseEntity getGoodsByUserId(@PathVariable("id") Integer id){
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("user_id",id);
+
         List<Map<String,Object>> maps = new ArrayList<>();
         List<Warehouse> list = warehouseMapper.selectList(queryWrapper);
         list.forEach(r->{
             Map map = new HashMap();
             map.put("ware",r);
-            map.put("goods",goodsService.query().eq("warehouse_id",r.getWarehouseId()).list());
+            map.put("goods",goodsService.query().eq("warehouse_id",r.getWarehouseId()).
+                    eq("status",2).list());
             maps.add(map);
         });
         return ResponseEntity.ok( maps);
@@ -134,6 +136,16 @@ public class GoodsController {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("user_id",id);
 
+        return ResponseEntity.ok( goodsMapper.selectList(queryWrapper));
+    }
+    /**
+     * 待入库货物
+     */
+    @GetMapping("/waitWare/{id}")
+    public ResponseEntity waitWare(@PathVariable("id") Integer id){
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("user_id",id);
+        queryWrapper.eq("status",0);
         return ResponseEntity.ok( goodsMapper.selectList(queryWrapper));
     }
 }

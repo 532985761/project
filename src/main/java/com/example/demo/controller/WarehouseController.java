@@ -108,14 +108,17 @@ public class WarehouseController {
     @RequestMapping("/changeWare/{wareId}")
     public ResponseEntity changeWare(@RequestParam(value = "id[]") Integer[] id,@PathVariable("wareId") Integer wareId){
         if (id.length <= 0){
+            //不是200就会在前端提示错误
             return new ResponseEntity("请选择物品", HttpStatus.MULTI_STATUS);
         }
         String str = "";
         for (Integer integer : id) {
             Goods goods = goodsMapper.selectById(integer);
             goods.setWarehouseId(wareId);
+
             goodsMapper.updateById(goods);
         }
+
         return ResponseEntity.ok("ok");
     }
 
@@ -128,6 +131,42 @@ public class WarehouseController {
         List<Warehouse> list = warehouseService.query().select("warehouse_id,warehouse_name").
                 eq("user_id",userId).list();
         return ResponseEntity.ok(list);
+    }
+    /**
+     * 物品入库
+     */
+    @RequestMapping("/intoWare/{wareId}")
+    public ResponseEntity intoWare(@RequestParam(value = "id[]") Integer[] id,@PathVariable("wareId") Integer wareId){
+        if (id.length <= 0){
+            return new ResponseEntity("请选择物品", HttpStatus.MULTI_STATUS);
+        }
+        String str = "";
+        for (Integer integer : id) {
+            Goods goods = goodsMapper.selectById(integer);
+            goods.setWarehouseId(wareId);
+            goods.setStatus(1);
+            goodsMapper.updateById(goods);
+        }
+
+        return ResponseEntity.ok("ok");
+    }
+    /**
+     * 物品出库
+     */
+    @RequestMapping("/outWare/{wareId}")
+    public ResponseEntity outWare(@RequestParam(value = "id[]") Integer[] id,@PathVariable("wareId") Integer wareId){
+        if (id.length <= 0){
+            return new ResponseEntity("请选择物品", HttpStatus.MULTI_STATUS);
+        }
+        String str = "";
+        for (Integer integer : id) {
+            Goods goods = goodsMapper.selectById(integer);
+            goods.setWarehouseId(wareId);
+            goods.setStatus(0);
+            goodsMapper.updateById(goods);
+        }
+
+        return ResponseEntity.ok("ok");
     }
 }
 
