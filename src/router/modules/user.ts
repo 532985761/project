@@ -34,6 +34,10 @@ export const user: Array<RouteRecordRaw> = [
         path: "outware",
         name: "outware",
         component: () => import("@/views/user-transfer/index.vue"),
+      }, {
+        path: "rent",
+        name: "userrent",
+        component: () => import("@/views/user-rent/index.vue"),
       },
     ]
   },

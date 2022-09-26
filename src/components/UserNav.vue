@@ -34,7 +34,7 @@
                   <span>仓库货物详情</span>
                 </el-menu-item>
 
-                <el-menu-item index="5">
+                <el-menu-item index="/user/rent">
                   <el-icon><setting /></el-icon>
                   <span>仓库租借</span>
                 </el-menu-item>
