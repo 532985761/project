@@ -7,6 +7,7 @@ import com.example.demo.domain.Goods;
 import com.example.demo.domain.SelectVO;
 import com.example.demo.domain.Warehouse;
 import com.example.demo.mapper.GoodsMapper;
+import com.example.demo.mapper.UserMapper;
 import com.example.demo.mapper.WarehouseMapper;
 
 import com.example.demo.service.GoodsService;
@@ -18,8 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/ware")
@@ -34,6 +34,8 @@ public class WarehouseController {
     GoodsMapper goodsMapper;
     @Resource
     GoodsService goodsService;
+    @Resource
+    UserMapper userMapper;
 
     /**
      * 获取仓库信息
@@ -168,5 +170,31 @@ public class WarehouseController {
 
         return ResponseEntity.ok("ok");
     }
+
+    /**
+     * 获取所有仓库以及仓库租借信息
+     */
+    @GetMapping("/wareRentInfo")
+    public ResponseEntity wareRentInfo(){
+        List<Map<String,Object>> mapList = new ArrayList<>();
+        warehouseService.list().forEach(r->{
+            Map<String,Object> map = new HashMap<>();
+            map.put("ware",r);
+            map.put("user",userMapper.selectById(r.getUserId()));
+            mapList.add(map);
+        });
+        return ResponseEntity.ok(mapList);
+    }
+
+    /**
+     * 更新仓库信息
+     */
+    @PostMapping("/rent")
+    public ResponseEntity rent(@RequestBody Warehouse warehouse){
+        warehouse.setStatus(1);
+        System.out.println(warehouse);
+        return ResponseEntity.ok(warehouseMapper.updateById(warehouse));
+    }
+
 }
 
