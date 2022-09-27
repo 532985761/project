@@ -42,6 +42,12 @@ export const manager: Array<RouteRecordRaw> = [
             name: 'transfer',
             component: () => import("@/views/manager-transfer/index.vue"),
         },
+        {
+            // 仓库调拨
+            path: "check",
+
+            component: () => import("@/views/manager-check/index.vue"),
+        },
     ],
   },
 ];

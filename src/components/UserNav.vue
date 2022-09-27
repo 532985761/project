@@ -42,7 +42,7 @@
                   <el-icon><setting /></el-icon>
                   <span>仓库调拨</span>
                 </el-menu-item>
-                <el-menu-item index="8">
+                <el-menu-item index="/user/check">
                   <el-icon><setting /></el-icon>
                   <span>货物质检</span>
                 </el-menu-item>

@@ -7,13 +7,7 @@
 
           <h3>物品</h3>
           <el-table :data="props.row.goods" >
-<!--            <el-table-column label="物品名字"  >-->
-<!--              <template #default="scope">-->
-<!--                {{scope.row}}-->
-<!--              </template>-->
-<!--            </el-table-column>-->
             <el-table-column type="index" width="50" />
-
             <el-table-column label="物品名字" prop="goodsName" />
             <el-table-column label="物品描述" prop="city" >
               <template #default="scope">
@@ -21,9 +15,16 @@
                 {{scope.row.info}}
               </template>
             </el-table-column>
+            <el-table-column label="质检结果" prop="city" >
+              <template #default="scope">
+                <span></span>
+                {{scope.row.result}}
+              </template>
+            </el-table-column>
             <el-table-column label="操作"  >
               <template #default="scope">
-                <el-button @click="getGoodsById(scope.row.goodsId)" type="primary">编辑</el-button>
+                <el-button v-if="scope.row.overdue==0" @click="checkGoodsById(scope.row.goodsId)" type="primary">申请质检</el-button>
+                <el-button  v-if="scope.row.overdue==1" @click="checkGoodsById(scope.row.goodsId)" disabled type="danger">质检中</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -36,26 +37,6 @@
       </template>
     </el-table-column>
   </el-table>
-
-  <el-dialog
-      v-model="dialogVisible"
-      title="Tips"
-      width="30%"
-      :before-close="handleClose"
-  >
-    <el-form :model="goods" label-width="120px">
-      <el-form-item label="货物名">
-        <el-input   v-model="goods.goodsName" />
-      </el-form-item>
-      <el-form-item label="货物介绍">
-        <el-input v-model="goods.info"  />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="editGoods(goods.goodsId)">修改</el-button>
-      </el-form-item>
-    </el-form>
-
-  </el-dialog>
 </template>
 
 <script lang="ts" setup>
@@ -81,23 +62,15 @@ onMounted(async ()=>{
 })
 const dialogVisible = ref(false)
 const goods:any = ref({})
-const getGoodsById = async (id)=>{
-  http.get("/goods/getGoodsById/"+id).then((r)=>{
+const checkGoodsById = async (id)=>{
+  goods.goodsId = id;
+  goods.overdue = 1;
+  http.post("/goods/updateGoods",goods).then((r)=>{
 
     goods.value = r.data
   })
+  init();
   dialogVisible.value = true;
 }
-const editGoods = async (id)=>{
 
-  http.post("/goods/updateGoods",goods.value).then((r)=>{
-    ElMessage({
-      message: "操作成功",
-      type: "success",
-      duration: 2 * 1000,
-    });
-        init();
-  })
-  dialogVisible.value = false;
-}
 </script>

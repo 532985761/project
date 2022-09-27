@@ -149,7 +149,7 @@ const confirmRent=()=>{
     })
     return false;
   }
-  const wh = {};
+  const wh:any = {};
   wh.warehouseId = wareId;
   wh.creatTime = dateFormat(dataRent.value[0],'yyyy-MM-dd hh:mm:ss')
   wh.rentTime = dateFormat(dataRent.value[1],'yyyy-MM-dd hh:mm:ss')

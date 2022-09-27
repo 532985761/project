@@ -7,13 +7,7 @@
 
           <h3>物品</h3>
           <el-table :data="props.row.goods" >
-<!--            <el-table-column label="物品名字"  >-->
-<!--              <template #default="scope">-->
-<!--                {{scope.row}}-->
-<!--              </template>-->
-<!--            </el-table-column>-->
             <el-table-column type="index" width="50" />
-
             <el-table-column label="物品名字" prop="goodsName" />
             <el-table-column label="物品描述" prop="city" >
               <template #default="scope">
@@ -21,9 +15,16 @@
                 {{scope.row.info}}
               </template>
             </el-table-column>
+            <el-table-column label="质检结果" prop="city" >
+              <template #default="scope">
+                <span></span>
+                {{scope.row.result}}
+              </template>
+            </el-table-column>
             <el-table-column label="操作"  >
               <template #default="scope">
-                <el-button @click="getGoodsById(scope.row.goodsId)" type="primary">编辑</el-button>
+                <el-button  @click="getGoodsById(scope.row.goodsId)" type="primary">填写质检结果</el-button>
+
               </template>
             </el-table-column>
           </el-table>
@@ -36,7 +37,6 @@
       </template>
     </el-table-column>
   </el-table>
-
   <el-dialog
       v-model="dialogVisible"
       title="Tips"
@@ -45,10 +45,10 @@
   >
     <el-form :model="goods" label-width="120px">
       <el-form-item label="货物名">
-        <el-input   v-model="goods.goodsName" />
+        <el-input disabled  v-model="goods.goodsName" />
       </el-form-item>
       <el-form-item label="货物介绍">
-        <el-input v-model="goods.info"  />
+        <el-input v-model="goods.result"  />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="editGoods(goods.goodsId)">修改</el-button>
@@ -70,7 +70,7 @@ const form:any = ref([])
 const  userstore = userStore()
 
 const init = ()=>{
-  http.get("/goods/getGoodsByUserId/"+userstore.info.id).then((r)=>{
+  http.get("/goods/getCheckGoods").then((r)=>{
     form.value = r.data
     console.log(r.data)
   })
@@ -89,15 +89,16 @@ const getGoodsById = async (id)=>{
   dialogVisible.value = true;
 }
 const editGoods = async (id)=>{
-
+  goods.value.overdue = 0;
   http.post("/goods/updateGoods",goods.value).then((r)=>{
     ElMessage({
       message: "操作成功",
       type: "success",
       duration: 2 * 1000,
     });
-        init();
+    init();
   })
   dialogVisible.value = false;
 }
+
 </script>

@@ -54,7 +54,7 @@
                   </el-menu-item-group>
 
                 </el-sub-menu>
-                <el-menu-item index="5">
+                <el-menu-item index="/manage/check">
                   <el-icon><setting /></el-icon>
                   <span>货物质检</span>
                 </el-menu-item>

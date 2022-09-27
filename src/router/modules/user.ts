@@ -38,6 +38,10 @@ export const user: Array<RouteRecordRaw> = [
         path: "rent",
         name: "userrent",
         component: () => import("@/views/user-rent/index.vue"),
+      }, {
+        path: "check",
+        name: "check",
+        component: () => import("@/views/user-check/index.vue"),
       },
     ]
   },
