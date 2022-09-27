@@ -148,4 +148,26 @@ public class GoodsController {
         queryWrapper.eq("status",0);
         return ResponseEntity.ok( goodsMapper.selectList(queryWrapper));
     }
+
+
+    /**
+     * 管理员获取质检货物
+     */
+    @GetMapping("/getCheckGoods")
+    public ResponseEntity getCheckGoods(){
+
+
+        List<Map<String,Object>> maps = new ArrayList<>();
+        List<Warehouse> list = warehouseService.list();
+        System.out.println(list);
+        list.forEach(r->{
+            Map map = new HashMap();
+            map.put("ware",r);
+            System.out.println(r);
+            map.put("goods",goodsService.query().eq("warehouse_id",r.getWarehouseId()).
+                    eq("status",2).eq("overdue",1).list());
+            maps.add(map);
+        });
+        return ResponseEntity.ok( maps);
+    }
 }
