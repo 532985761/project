@@ -74,7 +74,7 @@ public class WarehouseController {
         if (warehouse.getStatus() == 0 || warehouse.getStatus()==1) {
             warehouse.setStatus(2);
             warehouseMapper.updateById(warehouse);
-            return ResponseEntity.ok("修改状态");
+            return ResponseEntity.ok(" 修改状态");
 
         } else if (warehouse.getStatus() == 2){
             warehouse.setStatus(0);
