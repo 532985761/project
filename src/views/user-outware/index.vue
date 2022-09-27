@@ -35,37 +35,9 @@
 
   </el-table>
   <div style="margin-top: 20px">
-    <span>请选择需要调拨的仓库</span>
-    <el-select v-model="twoValue" class="m-2" placeholder="Select" size="large">
-      <el-option
-          v-for="item in twoOption"
-          :key="item.warehouseId"
-          :label="item.warehouseName"
-          :value="item.warehouseId"
-          @change="getGoods"
-      />
-    </el-select>
-    <el-button type="primary" @click="confirmChange">确认调拨</el-button>
+    <el-button type="primary" @click="confirmChange">确认出库</el-button>
   </div>
-  <el-dialog
-      v-model="dialogVisible"
-      title="Tips"
-      width="30%"
-      :before-close="handleClose"
-  >
-    <el-form :model="goods" label-width="120px">
-      <el-form-item label="货物名">
-        <el-input   v-model="goods.goodsName" />
-      </el-form-item>
-      <el-form-item label="货物介绍">
-        <el-input v-model="goods.info"  />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="editGoods(goods.goodsId)">修改</el-button>
-      </el-form-item>
-    </el-form>
 
-  </el-dialog>
 </template>
 
 <script lang="ts" setup>
@@ -93,7 +65,9 @@ const twoOption = ref([
 const init = ()=>{
   http.get("/goods/getGoodsByUserId/"+userstore.info.id).then((r)=>{
     form.value = r.data
-    console.log(r.data)
+
+
+    console.log(form.value)
   })
   http.get("/ware/getWareSelectByUserId").then((res)=>{
 
@@ -101,6 +75,7 @@ const init = ()=>{
 
   })
 }
+
 
 onMounted(async ()=>{
   init();
@@ -150,7 +125,7 @@ const confirmChange =()=>{
     return false;
   }
 
-  http.post("/ware/changeWare/"+twoValue.value,QS.stringify({'id': ids}, {arrayFormat: 'brackets'})).then(()=>{
+  http.post("/ware/userOutWare/"+twoValue.value,QS.stringify({'id': ids}, {arrayFormat: 'brackets'})).then(()=>{
     init();
     router.go(0)
   })

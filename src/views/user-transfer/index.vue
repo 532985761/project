@@ -29,8 +29,19 @@
     </el-table-column>
 
   </el-table>
+
   <div style="margin-top: 20px">
-    <el-button type="primary" @click="confirmChange">确认货物出库</el-button>
+    <span>请选择需要调拨的仓库</span>
+    <el-select v-model="twoValue" class="m-2" placeholder="Select" size="large">
+      <el-option
+          v-for="item in twoOption"
+          :key="item.warehouseId"
+          :label="item.warehouseName"
+          :value="item.warehouseId"
+          @change="getGoods"
+      />
+    </el-select>
+    <el-button type="primary" @click="confirmChange">确认调拨</el-button>
   </div>
 </template>
 
@@ -113,7 +124,11 @@ const confirmChange =()=>{
     })
     return false;
   }
-  http.post("/ware/outWare/"+twoValue.value,QS.stringify({'id': ids}, {arrayFormat: 'brackets'})).then(()=>{
+  // http.post("/ware/outWare/"+twoValue.value,QS.stringify({'id': ids}, {arrayFormat: 'brackets'})).then(()=>{
+  //   init();
+  //   router.go(0)
+  // })
+  http.post("/ware/changeWare/"+twoValue.value,QS.stringify({'id': ids}, {arrayFormat: 'brackets'})).then(()=>{
     init();
     router.go(0)
   })

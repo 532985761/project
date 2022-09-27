@@ -43,10 +43,20 @@ export const manager: Array<RouteRecordRaw> = [
             component: () => import("@/views/manager-transfer/index.vue"),
         },
         {
-            // 仓库调拨
+            // 货物质检
             path: "check",
 
             component: () => import("@/views/manager-check/index.vue"),
+        },   {
+            // 入库
+            path: "intoware",
+
+            component: () => import("@/views/manager-intoware/index.vue"),
+        },  {
+            // 出库
+            path: "outware",
+
+            component: () => import("@/views/manager-outware/index.vue"),
         },
     ],
   },

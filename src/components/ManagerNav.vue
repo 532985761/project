@@ -49,8 +49,8 @@
                     <span>库存变更</span>
                   </template>
                   <el-menu-item-group title="Group One">
-                    <el-menu-item index="4-1">查看入库信息</el-menu-item>
-                    <el-menu-item index="4-2">查看出库信息</el-menu-item>
+                    <el-menu-item index="/manage/intoware">查看入库信息</el-menu-item>
+                    <el-menu-item index="/manage/outware">查看出库信息</el-menu-item>
                   </el-menu-item-group>
 
                 </el-sub-menu>
