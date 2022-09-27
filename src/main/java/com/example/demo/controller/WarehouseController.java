@@ -153,7 +153,7 @@ public class WarehouseController {
         return ResponseEntity.ok("ok");
     }
     /**
-     * 物品出库
+     * 物品申请出库
      */
     @RequestMapping("/outWare/{wareId}")
     public ResponseEntity outWare(@RequestParam(value = "id[]") Integer[] id,@PathVariable("wareId") Integer wareId){
@@ -164,7 +164,25 @@ public class WarehouseController {
         for (Integer integer : id) {
             Goods goods = goodsMapper.selectById(integer);
             goods.setWarehouseId(wareId);
-            goods.setStatus(0);
+            goods.setStatus(3);
+            goodsMapper.updateById(goods);
+        }
+
+        return ResponseEntity.ok("ok");
+    }
+    /**
+     * 用户申请物品出库
+     */
+    @RequestMapping("/userOutWare/{wareId}")
+    public ResponseEntity userOutWare(@RequestParam(value = "id[]") Integer[] id,@PathVariable("wareId") Integer wareId){
+        if (id.length <= 0){
+            return new ResponseEntity("请选择物品", HttpStatus.MULTI_STATUS);
+        }
+        String str = "";
+        for (Integer integer : id) {
+            Goods goods = goodsMapper.selectById(integer);
+            goods.setWarehouseId(wareId);
+            goods.setStatus(3);
             goodsMapper.updateById(goods);
         }
 
