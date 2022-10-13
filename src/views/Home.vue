@@ -1,11 +1,6 @@
 <template>
   <el-row class="min-h-screen">
-<!--    <el-col-->
-<!--    :lg="8"-->
-<!--    class="flex items-center justify-center flex-col bg-sky-50 scale-up-hor-center"-->
-<!--  >-->
-<!--  -->
-<!--  </el-col>-->
+
     <el-col
       :lg="24"
       class="flex items-center justify-center bg-neutral-500 flex-col"
@@ -32,7 +27,6 @@
     </el-col>
   
   </el-row>
-  <UserRegister ref="childRef"></UserRegister>
 
 <!--  登录框-->
   <el-dialog

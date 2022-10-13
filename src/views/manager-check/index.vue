@@ -83,7 +83,6 @@ const dialogVisible = ref(false)
 const goods:any = ref({})
 const getGoodsById = async (id)=>{
   http.get("/goods/getGoodsById/"+id).then((r)=>{
-
     goods.value = r.data
   })
   dialogVisible.value = true;

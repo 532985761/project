@@ -57,6 +57,11 @@ export const manager: Array<RouteRecordRaw> = [
             path: "outware",
 
             component: () => import("@/views/manager-outware/index.vue"),
+        }, {
+            // 消息
+            path: "message",
+
+            component: () => import("@/views/manager-message/index.vue"),
         },
     ],
   },

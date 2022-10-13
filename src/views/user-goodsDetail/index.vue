@@ -3,17 +3,9 @@
     <el-table-column type="expand">
       <template #default="props">
         <div m="4">
-
-
           <h3>物品</h3>
           <el-table :data="props.row.goods" >
-<!--            <el-table-column label="物品名字"  >-->
-<!--              <template #default="scope">-->
-<!--                {{scope.row}}-->
-<!--              </template>-->
-<!--            </el-table-column>-->
             <el-table-column type="index" width="50" />
-
             <el-table-column label="物品名字" prop="goodsName" />
             <el-table-column label="物品描述" prop="city" >
               <template #default="scope">
@@ -83,13 +75,11 @@ const dialogVisible = ref(false)
 const goods:any = ref({})
 const getGoodsById = async (id)=>{
   http.get("/goods/getGoodsById/"+id).then((r)=>{
-
     goods.value = r.data
   })
   dialogVisible.value = true;
 }
 const editGoods = async (id)=>{
-
   http.post("/goods/updateGoods",goods.value).then((r)=>{
     ElMessage({
       message: "操作成功",

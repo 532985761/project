@@ -58,6 +58,10 @@
                   <el-icon><setting /></el-icon>
                   <span>货物质检</span>
                 </el-menu-item>
+                <el-menu-item index="/manage/message">
+                  <el-icon><setting /></el-icon>
+                  <span>消息通知</span>
+                </el-menu-item>
                 <el-menu-item index="/home">
                   <el-icon><CloseBold /></el-icon>
                   <span >点击退出</span>

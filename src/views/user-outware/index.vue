@@ -17,11 +17,6 @@
                 {{scope.row.info}}
               </template>
             </el-table-column>
-            <el-table-column label="操作"  >
-              <template #default="scope">
-                <el-button @click="getGoodsById(scope.row.goodsId)">编辑</el-button>
-              </template>
-            </el-table-column>
 
           </el-table>
         </div>

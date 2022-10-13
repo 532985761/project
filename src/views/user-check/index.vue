@@ -68,9 +68,10 @@ const checkGoodsById = async (id)=>{
   http.post("/goods/updateGoods",goods).then((r)=>{
 
     goods.value = r.data
+    init();
+    dialogVisible.value = true;
   })
-  init();
-  dialogVisible.value = true;
+
 }
 
 </script>

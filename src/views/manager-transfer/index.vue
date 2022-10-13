@@ -111,7 +111,6 @@ const confirmChange =()=>{
   multipleSelection.value.forEach((r:any)=>{
     ids.push(r.goodsId)
   })
-
   let params = new URLSearchParams();
   params.append('id',ids);
   if (ids.length == 0){

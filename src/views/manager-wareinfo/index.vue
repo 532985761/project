@@ -100,7 +100,6 @@ const dialogVisible1 = ref(false)
 const init = ()=>{
   http.get("/ware/getWarehouse").then((res)=>{
     tableData.value = res.data
-    console.log(res)
   })
 }
 onMounted(async ()=>{
@@ -120,13 +119,22 @@ const deleteWare =  (id)=>{
 }
 //新增仓库
 const toAddWare = ()=>{
-  http.post("/ware/addWarehouse",wareForm.value).then(()=>{
+  if (wareForm.value.area){
+    http.post("/ware/addWarehouse",wareForm.value).then(()=>{
+      ElMessage({
+        message: "操作成功",
+        type: "success",
+        duration: 2 * 1000,
+      });
+      init()
+    })
+  }else{
     ElMessage({
-      message: "操作成功",
-      type: "success",
+      message: "请输入容积",
+      type: "warning",
       duration: 2 * 1000,
     });
-    init()
-  })
+  }
+
 }
 </script>

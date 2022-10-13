@@ -1,4 +1,5 @@
 <template>
+  <el-button @click="dialogVisible = true">新增货物</el-button>
   <el-table :data="form"  style="width: 100%"   ref="multipleTableRef"
 
 
@@ -24,6 +25,36 @@
     </el-select>
     <el-button type="primary" @click="confirmChange">确认调拨</el-button>
   </div>
+  <el-dialog
+      v-model="dialogVisible"
+      title="Tips"
+      width="30%"
+      :before-close="handleClose"
+  >
+    <el-form
+        label-width="100px"
+        :model="goodsForm"
+        style="max-width: 460px"
+    >
+      <el-form-item label="货物名字">
+        <el-input v-model="goodsForm.goodsName" />
+      </el-form-item>
+      <el-form-item label="货物大小">
+        <el-input v-model="goodsForm.area" />
+      </el-form-item>
+      <el-form-item label="货物描述">
+        <el-input v-model="goodsForm.info" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="addGoods"
+        >Confirm</el-button
+        >
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts" setup>
@@ -34,7 +65,7 @@ import router from '@/router'
 import {userStore} from "@/store/user";
 import internal from "stream";
 import QS from "qs";
-
+const goodsForm:any = ref({})
 const form:any = ref([])
 const  userstore = userStore()
 const twoValue = ref(1)
@@ -56,7 +87,6 @@ const init = ()=>{
 
   })
 }
-
 onMounted(async ()=>{
   init();
 })
@@ -107,6 +137,20 @@ const confirmChange =()=>{
   http.post("/ware/intoWare/"+twoValue.value,QS.stringify({'id': ids}, {arrayFormat: 'brackets'})).then(()=>{
     init();
     router.go(0)
+  })
+}
+const addGoods=()=>{
+  goodsForm.value.userId = userstore.info.id;
+  goodsForm.value.status = 0;
+  goodsForm.value.overdue = 0;
+  http.post("/goods/addGoods",goodsForm.value).then(r=>{
+    dialogVisible.value = false;
+    ElMessage({
+      message: "success",
+      type: "success",
+      duration: 2 * 1000,
+    })
+    init();
   })
 }
 </script>

@@ -124,10 +124,7 @@ const confirmChange =()=>{
     })
     return false;
   }
-  // http.post("/ware/outWare/"+twoValue.value,QS.stringify({'id': ids}, {arrayFormat: 'brackets'})).then(()=>{
-  //   init();
-  //   router.go(0)
-  // })
+//[1,2,2,3,6,5]
   http.post("/ware/changeWare/"+twoValue.value,QS.stringify({'id': ids}, {arrayFormat: 'brackets'})).then(()=>{
     init();
     router.go(0)
