@@ -65,40 +65,6 @@ public class GoodsController {
     /**
      * 货物入库
      */
-    @PostMapping("/goodsToWare/{goodsId}/{wareId}")
-    public ResponseEntity  goodsToWare(@PathVariable("goodsId") Integer goodsId,@PathVariable("wareId") Integer wareId){
-        Goods goods = new Goods();
-        goods.setGoodsId(goodsId);
-        goods.setWarehouseId(wareId);
-        //通知管理员
-        Message message = new Message();
-        String userId = stringRedisTemplate.opsForValue().get("ws:userLogin");
-        assert userId != null;
-        message.setFromId(Integer.valueOf(userId));
-        message.setToId(1);
-        message.setContent("货物入库了");
-        messageMapper.insert(message);
-        return ResponseEntity.ok(goodsMapper.updateById(goods));
-    }
-    /**
-     * 货物出库
-     */
-    @PostMapping("/goodsOutWare/{goodsId}/{wareId}")
-    public ResponseEntity  goodsOutWare(@PathVariable("goodsId") Integer goodsId,@PathVariable("wareId") Integer wareId){
-        Goods goods = new Goods();
-        goods.setGoodsId(goodsId);
-        goods.setWarehouseId(null);
-        //通知管理员
-        Message message = new Message();
-        String userId = stringRedisTemplate.opsForValue().get("ws:userLogin");
-        assert userId != null;
-        message.setFromId(Integer.valueOf(userId));
-        message.setToId(1);
-        message.setContent("货物出库了");
-        messageMapper.insert(message);
-        return ResponseEntity.ok(goodsMapper.updateById(goods));
-    }
-
     /**
      * 每个用户对应的货物
      */
@@ -106,12 +72,13 @@ public class GoodsController {
     public ResponseEntity getGoodsByUserId(@PathVariable("id") Integer id){
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("user_id",id);
-
         List<Map<String,Object>> maps = new ArrayList<>();
         List<Warehouse> list = warehouseMapper.selectList(queryWrapper);
         list.forEach(r->{
             Map map = new HashMap();
             map.put("ware",r);
+            //r代表的是每一条仓库的信息
+            //1申请入库，2申请出库，3入库成功，0是出库状态--status
             map.put("goods",goodsService.query().eq("warehouse_id",r.getWarehouseId()).
                     eq("status",2).list());
             maps.add(map);

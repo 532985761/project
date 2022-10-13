@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.example.demo.domain.Goods;
+import com.example.demo.domain.Message;
 import com.example.demo.domain.SelectVO;
 import com.example.demo.domain.Warehouse;
 import com.example.demo.mapper.GoodsMapper;
+import com.example.demo.mapper.MessageMapper;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.mapper.WarehouseMapper;
 
@@ -36,6 +38,8 @@ public class WarehouseController {
     GoodsService goodsService;
     @Resource
     UserMapper userMapper;
+    @Resource
+    MessageMapper messageMapper;
 
     /**
      * 获取仓库信息
@@ -51,7 +55,7 @@ public class WarehouseController {
     @PostMapping("/addWarehouse")
     public ResponseEntity addWarehouse(@RequestBody Warehouse warehouse){
         warehouse.setAreaRemain(warehouse.getArea());
-        String userId = stringRedisTemplate.opsForValue().get("userLogin");
+        String userId = stringRedisTemplate.opsForValue().get("ws:userLogin");
         warehouse.setUserId(Integer.valueOf(userId));
         warehouseMapper.insert(warehouse);
         return ResponseEntity.ok("新增");
@@ -62,6 +66,7 @@ public class WarehouseController {
      */
     @GetMapping("/deleteWarehouse/{id}")
     public ResponseEntity deleteWarehouse(@PathVariable("id") Integer id){
+
         return ResponseEntity.ok(warehouseMapper.deleteById(id));
     }
 
@@ -117,10 +122,8 @@ public class WarehouseController {
         for (Integer integer : id) {
             Goods goods = goodsMapper.selectById(integer);
             goods.setWarehouseId(wareId);
-
             goodsMapper.updateById(goods);
         }
-
         return ResponseEntity.ok("ok");
     }
 
@@ -143,13 +146,20 @@ public class WarehouseController {
             return new ResponseEntity("请选择物品", HttpStatus.MULTI_STATUS);
         }
         String str = "";
+        StringBuilder name = new StringBuilder();
         for (Integer integer : id) {
             Goods goods = goodsMapper.selectById(integer);
+            name.append("(").append(goods.getGoodsName()).append(")");
             goods.setWarehouseId(wareId);
             goods.setStatus(1);
             goodsMapper.updateById(goods);
         }
-
+        //消息通知
+        String userId = stringRedisTemplate.opsForValue().get("ws:userLogin");
+        Message message = new Message();
+        message.setFromId(Integer.valueOf(userId));
+        message.setContent(name+"货物申请入库");
+        messageMapper.insert(message);
         return ResponseEntity.ok("ok");
     }
     /**
@@ -161,12 +171,14 @@ public class WarehouseController {
             return new ResponseEntity("请选择物品", HttpStatus.MULTI_STATUS);
         }
         String str = "";
+        StringBuilder name = new StringBuilder();
         for (Integer integer : id) {
             Goods goods = goodsMapper.selectById(integer);
             goods.setWarehouseId(wareId);
             goods.setStatus(3);
             goodsMapper.updateById(goods);
         }
+
 
         return ResponseEntity.ok("ok");
     }
@@ -179,12 +191,23 @@ public class WarehouseController {
             return new ResponseEntity("请选择物品", HttpStatus.MULTI_STATUS);
         }
         String str = "";
+        StringBuilder name = new StringBuilder();
+        name.append("[");
         for (Integer integer : id) {
             Goods goods = goodsMapper.selectById(integer);
             goods.setWarehouseId(wareId);
             goods.setStatus(3);
+            name.append("(").append(goods.getGoodsName()).append(")");
             goodsMapper.updateById(goods);
         }
+        name.append("]");
+        //消息通知
+        String userId = stringRedisTemplate.opsForValue().get("ws:userLogin");
+        Message message = new Message();
+        assert userId != null;
+        message.setFromId(Integer.valueOf(userId));
+        message.setContent(name+"货物申请入库");
+        messageMapper.insert(message);
 
         return ResponseEntity.ok("ok");
     }

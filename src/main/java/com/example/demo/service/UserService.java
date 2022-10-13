@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.function.Function;
 
 /**
-*  
+*
 * @description 针对表【user】的数据库操作Service实现
 * @createDate 2022-09-09 14:02:21
 */
@@ -71,32 +71,11 @@ public class UserService extends ServiceImpl<UserMapper, User>
                 return ResponseEntity.ok("注册成功");
             }
             else{
-
+                //只要状态码不是200就会报错，出现提示信息
                 return new ResponseEntity("用户名重复",HttpStatus.MULTI_STATUS);
             }
         }
 
-
-        public ResponseEntity managerLogin(Login user, HttpServletRequest request) {
-            Map<String,Object> map = new HashMap<>();
-            map.put("username",user.getUsername());
-            map.put("password",user.getPassword());
-            List<User> users = userMapper.selectByMap(map);
-            if (!(Objects.equals(stringRedisTemplate.opsForValue().get("captcha:" + request.getRemoteAddr() + ":"), user.getCode()))){
-                return new ResponseEntity("验证码有误，请重试",HttpStatus.MULTI_STATUS);
-
-            }
-            if (users.size()<=0){
-                return new ResponseEntity("账号密码有误，请重试",HttpStatus.MULTI_STATUS);
-            }
-            else {
-                if (users.get(0).getStatus() == 0){
-                    return new ResponseEntity("此处为管理员登录",HttpStatus.MULTI_STATUS);
-
-                }
-                return ResponseEntity.ok(userMapper.selectByMap(map).get(0));
-            }
-        }
 
 }
 
