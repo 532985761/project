@@ -14,6 +14,7 @@ import com.example.demo.mapper.WarehouseMapper;
 
 import com.example.demo.service.GoodsService;
 import com.example.demo.service.WarehouseService;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -95,9 +96,12 @@ public class WarehouseController {
      */
     @GetMapping("/getGoodsByWareId/{id}")
     public ResponseEntity getGoodsByWareId(@PathVariable("id") Integer id){
+        Map<String,Object> map = new HashMap<>();
         QueryWrapper wrapper = new QueryWrapper();
         wrapper.eq("warehouse_id",id);
-        return ResponseEntity.ok( goodsService.list(wrapper));
+        map.put("list", goodsService.list(wrapper));
+        map.put("ware", warehouseMapper.selectById(id));
+        return ResponseEntity.ok(map);
     }
     /**
      * 获取仓库名和仓库id
@@ -110,7 +114,7 @@ public class WarehouseController {
     }
 
     /**
-     * 转移物品
+     * 管理员转移物品
      */
     @RequestMapping("/changeWare/{wareId}")
     public ResponseEntity changeWare(@RequestParam(value = "id[]") Integer[] id,@PathVariable("wareId") Integer wareId){
@@ -119,6 +123,26 @@ public class WarehouseController {
             return new ResponseEntity("请选择物品", HttpStatus.MULTI_STATUS);
         }
         String str = "";
+        Integer total = 0;
+        for (Integer integer : id) {
+            Goods goods = goodsMapper.selectById(integer);
+            total+=goods.getArea();
+        }
+        //判断是否超过容量大小
+        Integer area = warehouseMapper.selectById(wareId).getArea();
+        //获取仓库原有货物容量
+        Integer perTotal = 0;
+        if (goodsService.query().eq("warehouse_id", wareId).list().size()>0){
+            for (Goods goods : goodsService.query().eq("warehouse_id", wareId).list()) {
+                perTotal+=goods.getArea();
+            }
+            System.out.println(area);
+            System.out.println(perTotal);
+            System.out.println(total);
+            if (area - perTotal < total){
+                return new ResponseEntity("仓库容量不足！或者有货物正在等待出入库",HttpStatus.MULTI_STATUS);
+            }
+        }
         for (Integer integer : id) {
             Goods goods = goodsMapper.selectById(integer);
             goods.setWarehouseId(wareId);
@@ -142,11 +166,38 @@ public class WarehouseController {
      */
     @RequestMapping("/intoWare/{wareId}")
     public ResponseEntity intoWare(@RequestParam(value = "id[]") Integer[] id,@PathVariable("wareId") Integer wareId){
+        String userId = stringRedisTemplate.opsForValue().get("ws:userLogin");
         if (id.length <= 0){
             return new ResponseEntity("请选择物品", HttpStatus.MULTI_STATUS);
         }
         String str = "";
         StringBuilder name = new StringBuilder();
+        int total =0;
+        for (Integer integer : id) {
+            Goods goods = goodsMapper.selectById(integer);
+            name.append("(").append(goods.getGoodsName()).append(")");
+            total+=goods.getArea();
+
+        }
+        //判断是否超过容量大小
+        Integer area = warehouseMapper.selectById(wareId).getArea();
+        //获取仓库原有货物容量
+        Integer perTotal = 0;
+        if (goodsService.query().eq("warehouse_id", wareId).list().size()>0){
+            for (Goods goods : goodsService.query().eq("warehouse_id", wareId).list()) {
+                perTotal+=goods.getArea();
+            }
+            System.out.println(area);
+            System.out.println(perTotal);
+            System.out.println(total);
+            if (area - perTotal < total){
+                return new ResponseEntity("仓库容量不足！",HttpStatus.MULTI_STATUS);
+            }
+        }else {
+            if (area - perTotal < total){
+                return new ResponseEntity("仓库容量不足！",HttpStatus.MULTI_STATUS);
+            }
+        }
         for (Integer integer : id) {
             Goods goods = goodsMapper.selectById(integer);
             name.append("(").append(goods.getGoodsName()).append(")");
@@ -155,7 +206,6 @@ public class WarehouseController {
             goodsMapper.updateById(goods);
         }
         //消息通知
-        String userId = stringRedisTemplate.opsForValue().get("ws:userLogin");
         Message message = new Message();
         message.setFromId(Integer.valueOf(userId));
         message.setContent(name+"货物申请入库");
@@ -178,8 +228,6 @@ public class WarehouseController {
             goods.setStatus(3);
             goodsMapper.updateById(goods);
         }
-
-
         return ResponseEntity.ok("ok");
     }
     /**
@@ -206,7 +254,7 @@ public class WarehouseController {
         Message message = new Message();
         assert userId != null;
         message.setFromId(Integer.valueOf(userId));
-        message.setContent(name+"货物申请入库");
+        message.setContent(name+"货物申请出库");
         messageMapper.insert(message);
 
         return ResponseEntity.ok("ok");

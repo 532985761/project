@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.demo.domain.Goods;
 import com.example.demo.domain.Message;
 import com.example.demo.domain.Warehouse;
@@ -59,7 +60,12 @@ public class GoodsController {
      */
     @PostMapping("/updateGoods")
     public ResponseEntity  updateGoods(@RequestBody Goods goods){
-        return ResponseEntity.ok(goodsMapper.updateById(goods));
+        goods.setWarehouseId(null);
+        UpdateWrapper wrapper = new UpdateWrapper();
+        wrapper.set("warehouse_id",null);
+        wrapper.set("status",0);
+        wrapper.eq("goods_id",goods.getGoodsId());
+        return ResponseEntity.ok(goodsService.update(wrapper));
     }
 
     /**
@@ -166,17 +172,6 @@ public class GoodsController {
     public ResponseEntity getOutGoods(){
 
 
-        List<Map<String,Object>> maps = new ArrayList<>();
-        List<Warehouse> list = warehouseService.list();
-        System.out.println(list);
-        list.forEach(r->{
-            Map map = new HashMap();
-            map.put("ware",r);
-            System.out.println(r);
-            map.put("goods",goodsService.query().eq("warehouse_id",r.getWarehouseId()).
-                    eq("status",3).list());
-            maps.add(map);
-        });
-        return ResponseEntity.ok( maps);
+        return ResponseEntity.ok( goodsService.query().eq("status",3).list());
     }
 }
