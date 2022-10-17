@@ -61,14 +61,14 @@ const confirmInto = async (id)=>{
   goods.value.status = 2;
 
   http.post("/goods/updateGoods",goods.value).then((r)=>{
-
+    init()
+    ElMessage({
+      message: "操作成功",
+      type: "success",
+      duration: 2 * 1000,
+    });
   })
-  init()
-  ElMessage({
-    message: "操作成功",
-    type: "success",
-    duration: 2 * 1000,
-  });
+
 
 }
 </script>

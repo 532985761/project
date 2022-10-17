@@ -1,9 +1,5 @@
 <template>
-  <el-table :data="form"  style="width: 100%"   ref="multipleTableRef"
-
-
-           >
-
+  <el-table :data="form"  style="width: 100%"   ref="multipleTableRef">
     <el-table-column label="仓库名字"  >
       <template #default="scope">
         {{scope.row.ware.warehouseName}}
@@ -83,14 +79,7 @@ const dataRent = ref<[Date, Date]>([
 ])
 const form:any = ref([])
 const  userstore = userStore()
-const twoValue = ref(1)
-const twoOption = ref([
-  {
-    "warehouseId":1,
-    "warehouseName":1
 
-  }
-])
 const init = ()=>{
   http.get("/ware/wareRentInfo").then((r)=>{
     form.value = r.data
@@ -102,26 +91,6 @@ onMounted(async ()=>{
   init();
 })
 const dialogVisible = ref(false)
-const goods:any = ref({})
-const getGoodsById = async (id)=>{
-  http.get("/goods/getGoodsById/"+id).then((r)=>{
-
-    goods.value = r.data
-  })
-  dialogVisible.value = true;
-}
-const editGoods = async (id)=>{
-
-  http.post("/goods/updateGoods",goods.value).then((r)=>{
-    ElMessage({
-      message: "操作成功",
-      type: "success",
-      duration: 2 * 1000,
-    });
-        init();
-  })
-  dialogVisible.value = false;
-}
 let wareId:any= 0;
 
 const getId = (id) =>{

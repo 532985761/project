@@ -11,6 +11,11 @@
         {{scope.row.goodsName}}
       </template>
     </el-table-column>
+    <el-table-column label="货物大小"  >
+      <template #default="scope">
+        {{scope.row.area}}㎡
+      </template>
+    </el-table-column>
 
   </el-table>
   <div style="margin-top: 20px">
@@ -143,14 +148,23 @@ const addGoods=()=>{
   goodsForm.value.userId = userstore.info.id;
   goodsForm.value.status = 0;
   goodsForm.value.overdue = 0;
-  http.post("/goods/addGoods",goodsForm.value).then(r=>{
-    dialogVisible.value = false;
+  if (goodsForm.value.goodsName &&goodsForm.value.area &&goodsForm.value.info ){
+    http.post("/goods/addGoods",goodsForm.value).then(r=>{
+      dialogVisible.value = false;
+      ElMessage({
+        message: "success",
+        type: "success",
+        duration: 2 * 1000,
+      })
+      init();
+    })
+  }else {
     ElMessage({
-      message: "success",
-      type: "success",
+      message: "请检查",
+      type: "warning",
       duration: 2 * 1000,
     })
-    init();
-  })
+  }
+
 }
 </script>

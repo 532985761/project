@@ -1,5 +1,5 @@
 <template>
-  <span>请选择原仓库</span>
+  <span>请选择原仓库</span><span class="ml-10" >仓库容积：{{ware.area}}㎡</span>
   <el-select v-model="oneValue" class="m-2" placeholder="Select" size="large"   @change="getGoods">
     <el-option
         v-for="item in oneOption"
@@ -74,7 +74,6 @@ const init = ()=>{
   http.get("/ware/getWareSelect").then((res)=>{
     oneOption.value = res.data
     twoOption.value = res.data
-
   })
 }
 onMounted(()=>{
@@ -82,9 +81,11 @@ onMounted(()=>{
 })
 
 const goods = ref([])
+const ware = ref({})
 const getGoods = ((res)=>{
   http.get("/ware/getGoodsByWareId/"+res).then((res)=>{
-    goods.value = res.data
+    goods.value = res.data.list
+    ware.value = res.data.ware
     goods.value = goods.value.filter(r => r.status != 0);
   })
 })
@@ -110,6 +111,7 @@ const handleSelectionChange = (val) => {
 
 const confirmChange =()=>{
   let ids:any = [];
+
   multipleSelection.value.forEach((r:any)=>{
     ids.push(r.goodsId)
   })
